@@ -8,8 +8,6 @@ export function Header() {
   const { connectors, connect } = useConnect();
   const { isConnected } = useAccount();
 
-  console.log("isConnected", isConnected);
-
   const metaMaskConnector = connectors.find(
     (connector) => connector.id === "metaMaskSDK"
   );

@@ -19,7 +19,7 @@ export const GET_TRANSFERS_BY_ADDRESS = gql`
     transfers(
       orderDirection: desc
       orderBy: blockTimestamp
-      where: { _or: [{ from: { _eq: $address } }, { to: { _eq: $address } }] }
+      where: { or: [{ from: $address }, { to: $address }] }
     ) {
       blockNumber
       blockTimestamp

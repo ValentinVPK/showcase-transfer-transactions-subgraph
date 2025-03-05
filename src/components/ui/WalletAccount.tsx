@@ -33,7 +33,11 @@ export function Account() {
           </div>
         </div>
       </div>
-      <Button onClick={() => disconnect()}>
+      <Button
+        onClick={() => disconnect()}
+        className="cursor-pointer"
+        variant="destructive"
+      >
         <Wallet className="h-4 w-4 mr-2" />
         Disconnect
       </Button>
