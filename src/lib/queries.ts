@@ -1,8 +1,13 @@
 import { gql } from "@apollo/client";
 
 export const GET_TRANSFERS = gql`
-  query {
-    transfers(orderDirection: desc, orderBy: blockTimestamp) {
+  query GetTransfers($first: Int, $skip: Int) {
+    transfers(
+      orderDirection: desc
+      orderBy: blockTimestamp
+      first: $first
+      skip: $skip
+    ) {
       blockNumber
       blockTimestamp
       from
@@ -15,11 +20,13 @@ export const GET_TRANSFERS = gql`
 `;
 
 export const GET_TRANSFERS_BY_ADDRESS = gql`
-  query GetTransactionsByAddress($address: String!) {
+  query GetTransactionsByAddress($address: String!, $first: Int, $skip: Int) {
     transfers(
       orderDirection: desc
       orderBy: blockTimestamp
       where: { or: [{ from: $address }, { to: $address }] }
+      first: $first
+      skip: $skip
     ) {
       blockNumber
       blockTimestamp

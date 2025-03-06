@@ -14,6 +14,8 @@ import { format } from "date-fns";
 import { ExternalLink, FileX } from "lucide-react";
 import { ETHERSCAN_BASE_URL } from "@/lib/constants";
 import { formatAddress, formatValue } from "@/lib/utils";
+import usePagination, { PAGE_SIZE } from "@/hooks/usePagination";
+import TransfersPagination from "../ui/TransfersPagination";
 
 type TransactionsTableProps = {
   walletAddress?: string;
@@ -22,10 +24,14 @@ type TransactionsTableProps = {
 export default function TransactionsTable({
   walletAddress,
 }: TransactionsTableProps) {
+  const { currentPage, handlePageChange, skip } = usePagination();
+
   const { data, loading, error, refetch } = useQuery(
     walletAddress ? GET_TRANSFERS_BY_ADDRESS : GET_TRANSFERS,
     {
-      variables: walletAddress ? { address: walletAddress } : undefined,
+      variables: walletAddress
+        ? { address: walletAddress, first: PAGE_SIZE, skip }
+        : { first: PAGE_SIZE, skip },
       pollInterval: 60000,
       notifyOnNetworkStatusChange: true,
     }
@@ -64,7 +70,7 @@ export default function TransactionsTable({
       )}
 
       {!loading && !error && (
-        <div className="rounded-md border">
+        <div className="rounded-md border p-3">
           <Table>
             <TableCaption>
               {walletAddress
@@ -103,9 +109,7 @@ export default function TransactionsTable({
                   <TableRow key={transfer.id}>
                     <TableCell
                       className={`font-mono ${
-                        walletAddress &&
-                        transfer.from.toLowerCase() ===
-                          walletAddress.toLowerCase()
+                        walletAddress && transfer.from === walletAddress
                           ? "bg-primary/10"
                           : ""
                       }`}
@@ -121,9 +125,7 @@ export default function TransactionsTable({
                     </TableCell>
                     <TableCell
                       className={`font-mono ${
-                        walletAddress &&
-                        transfer.to.toLowerCase() ===
-                          walletAddress.toLowerCase()
+                        walletAddress && transfer.to === walletAddress
                           ? "bg-primary/10"
                           : ""
                       }`}
@@ -170,6 +172,8 @@ export default function TransactionsTable({
               )}
             </TableBody>
           </Table>
+
+          {!noTransfers && <TransfersPagination />}
         </div>
       )}
     </div>
