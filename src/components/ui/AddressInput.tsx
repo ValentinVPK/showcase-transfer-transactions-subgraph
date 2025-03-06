@@ -61,7 +61,7 @@ export default function AddressInput({
           size="sm"
           onClick={handleSubmit}
           variant="secondary"
-          className="h-full rounded-l-none px-3"
+          className="h-full rounded-l-none px-3 cursor-pointer"
         >
           Search
         </Button>

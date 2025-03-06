@@ -1,54 +1,66 @@
-# React + TypeScript + Vite
+# USDT Transfer Tracker on Sepolia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This application tracks ERC-20 USDT token transfers on the Sepolia testnet using a subgraph built on The Graph protocol. The app provides a user-friendly interface to view and filter transfer transactions.
 
-Currently, two official plugins are available:
+## Features
+
+- Real-time tracking of USDT transfers on Sepolia testnet
+- Filter transactions by wallet address
+- Pagination for browsing through transaction history
+- Direct links to Etherscan for transaction details
+- Responsive design for desktop and mobile
+
+## Technology Stack
+
+- **Frontend**: React + TypeScript + Vite
+- **Styling**: Tailwind CSS
+- **Data Fetching**: Apollo Client for GraphQL
+- **Indexing**: The Graph Protocol
+
+## Subgraph Information
+
+This application uses a custom subgraph to index USDT transfer events on the Sepolia testnet. The subgraph efficiently tracks all transfer events for the USDT contract at [0x93C5d30a7509E60871B77A3548a5BD913334cd35](https://sepolia.etherscan.io/address/0x93C5d30a7509E60871B77A3548a5BD913334cd35).
+
+- **Subgraph Playground**: [https://thegraph.com/studio/subgraph/subgraph-transactions-on-sepolia/playground](https://thegraph.com/studio/subgraph/subgraph-transactions-on-sepolia/playground)
+- **Subgraph Repository**: [https://github.com/ValentinVPK/subgraph-transactions-on-sepolia](https://github.com/ValentinVPK/subgraph-transactions-on-sepolia)
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or later)
+- npm or yarn
+
+### Installation
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/showcase-transfer-transactions-subgraph.git
+cd showcase-transfer-transactions-subgraph
+```
+
+2. Install dependencies
+
+```bash
+npm install
+# or
+yarn
+```
+
+3. Start the development server
+
+```bash
+npm run dev
+# or
+yarn dev
+```
+
+4. Open your browser and navigate to `http://localhost:5173`
+
+## Development
+
+This project uses Vite for fast development with HMR (Hot Module Replacement):
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
