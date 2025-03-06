@@ -14,8 +14,11 @@ import { format } from "date-fns";
 import { ExternalLink, FileX } from "lucide-react";
 import { ETHERSCAN_BASE_URL } from "@/lib/constants";
 import { formatAddress, formatValue } from "@/lib/utils";
-import usePagination, { PAGE_SIZE } from "@/hooks/usePagination";
+import usePagination, {
+  ESTIMATED_TOTAL_TRANSFERS,
+} from "@/hooks/usePagination";
 import TransfersPagination from "../ui/TransfersPagination";
+import TransfersPageSizeDropdown from "../ui/TransfersPageSizeDropdown";
 
 type TransactionsTableProps = {
   walletAddress?: string;
@@ -24,20 +27,23 @@ type TransactionsTableProps = {
 export default function TransactionsTable({
   walletAddress,
 }: TransactionsTableProps) {
-  const { currentPage, handlePageChange, skip } = usePagination();
+  const { currentPage, handlePageChange, skip, pageSize, setPageSize } =
+    usePagination();
 
   const { data, loading, error, refetch } = useQuery(
     walletAddress ? GET_TRANSFERS_BY_ADDRESS : GET_TRANSFERS,
     {
       variables: walletAddress
-        ? { address: walletAddress, first: PAGE_SIZE, skip }
-        : { first: PAGE_SIZE, skip },
+        ? { address: walletAddress, first: pageSize, skip }
+        : { first: pageSize, skip },
       pollInterval: 60000,
       notifyOnNetworkStatusChange: true,
     }
   );
 
   const noTransfers = !data?.transfers || data.transfers.length === 0;
+
+  const totalPages = Math.ceil(ESTIMATED_TOTAL_TRANSFERS / pageSize);
 
   return (
     <div className="space-y-4">
@@ -46,6 +52,10 @@ export default function TransactionsTable({
           {walletAddress ? "Your Transactions" : "Recent Transfers"}
         </h2>
         <div className="flex items-center gap-2">
+          <TransfersPageSizeDropdown
+            pageSize={pageSize}
+            setPageSize={setPageSize}
+          />
           <button
             onClick={() => {
               refetch();
@@ -70,7 +80,7 @@ export default function TransactionsTable({
       )}
 
       {!loading && !error && (
-        <div className="rounded-md border p-3">
+        <div className="rounded-md border">
           <Table>
             <TableCaption>
               {walletAddress
@@ -109,7 +119,9 @@ export default function TransactionsTable({
                   <TableRow key={transfer.id}>
                     <TableCell
                       className={`font-mono ${
-                        walletAddress && transfer.from === walletAddress
+                        walletAddress &&
+                        transfer.from.toLowerCase() ===
+                          walletAddress.toLowerCase()
                           ? "bg-primary/10"
                           : ""
                       }`}
@@ -125,7 +137,9 @@ export default function TransactionsTable({
                     </TableCell>
                     <TableCell
                       className={`font-mono ${
-                        walletAddress && transfer.to === walletAddress
+                        walletAddress &&
+                        transfer.to.toLowerCase() ===
+                          walletAddress.toLowerCase()
                           ? "bg-primary/10"
                           : ""
                       }`}
@@ -173,7 +187,15 @@ export default function TransactionsTable({
             </TableBody>
           </Table>
 
-          {!noTransfers && <TransfersPagination />}
+          {!noTransfers && (
+            <div className="flex flex-col items-center py-4">
+              <TransfersPagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPageChange={handlePageChange}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

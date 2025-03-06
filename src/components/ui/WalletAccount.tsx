@@ -11,7 +11,7 @@ export function Account() {
   const formattedAddress = formatAddress(address);
 
   return (
-    <div className="flex items-center justify-between p-4 rounded-lg bg-gray-50 shadow-sm gap-3">
+    <div className="flex items-center justify-between p-4 rounded-lg bg-gray-50 shadow-sm gap-3 ">
       <div className="flex items-center gap-3">
         {ensAvatar ? (
           <img
