@@ -1,12 +1,8 @@
-import { useAccount } from "wagmi";
 import { Header } from "./components/layout/Header";
 import TransactionsTable from "./components/layout/TransactionsTable";
 import { formatAddress } from "./lib/utils";
-// import { TESTING_WALLET_ADDRESS } from "./lib/constants";
 
 function App() {
-  const { address } = useAccount();
-
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
@@ -27,7 +23,7 @@ function App() {
             </a>
           </p>
         </div>
-        <TransactionsTable walletAddress={address} />
+        <TransactionsTable />
       </main>
     </div>
   );

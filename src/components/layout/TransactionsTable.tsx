@@ -19,14 +19,13 @@ import usePagination, {
 } from "@/hooks/usePagination";
 import TransfersPagination from "../ui/TransfersPagination";
 import TransfersPageSizeDropdown from "../ui/TransfersPageSizeDropdown";
+import AddressInput from "../ui/AddressInput";
 
-type TransactionsTableProps = {
-  walletAddress?: string;
-};
+import { useWalletAddress } from "@/hooks/useWalletAddress";
+import { useMemo } from "react";
 
-export default function TransactionsTable({
-  walletAddress,
-}: TransactionsTableProps) {
+export default function TransactionsTable() {
+  const { walletAddress, setWalletAddress } = useWalletAddress();
   const { currentPage, handlePageChange, skip, pageSize, setPageSize } =
     usePagination();
 
@@ -43,7 +42,27 @@ export default function TransactionsTable({
 
   const noTransfers = !data?.transfers || data.transfers.length === 0;
 
-  const totalPages = Math.ceil(ESTIMATED_TOTAL_TRANSFERS / pageSize);
+  const totalPages = useMemo(() => {
+    if (noTransfers) return 1;
+
+    if (data?.transfers.length < pageSize && currentPage === 1) {
+      return 1;
+    }
+
+    if (data?.transfers.length === pageSize) {
+      return walletAddress
+        ? currentPage + 1
+        : Math.ceil(ESTIMATED_TOTAL_TRANSFERS / pageSize);
+    }
+
+    return Math.ceil(ESTIMATED_TOTAL_TRANSFERS / pageSize);
+  }, [
+    noTransfers,
+    data?.transfers.length,
+    pageSize,
+    currentPage,
+    walletAddress,
+  ]);
 
   return (
     <div className="space-y-4">
@@ -51,7 +70,8 @@ export default function TransactionsTable({
         <h2 className="text-2xl font-bold tracking-tight">
           {walletAddress ? "Your Transactions" : "Recent Transfers"}
         </h2>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 pb-3">
+          <AddressInput onAddressSubmit={setWalletAddress} />
           <TransfersPageSizeDropdown
             pageSize={pageSize}
             setPageSize={setPageSize}

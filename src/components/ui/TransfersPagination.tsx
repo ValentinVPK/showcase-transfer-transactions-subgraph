@@ -23,6 +23,10 @@ export default function TransfersPagination({
   const getPageNumbers = useCallback(() => {
     const pageNumbers = [];
 
+    if (totalPages <= 1) {
+      return [1];
+    }
+
     pageNumbers.push(1);
 
     const startPage = Math.max(2, currentPage - 1);
