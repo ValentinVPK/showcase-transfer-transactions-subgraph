@@ -15,6 +15,7 @@ This application tracks ERC-20 USDT token transfers on the Sepolia testnet using
 - **Frontend**: React + TypeScript + Vite
 - **Styling**: Tailwind CSS
 - **Data Fetching**: Apollo Client for GraphQL
+- **Web3 Integration**: wagmi
 - **Indexing**: The Graph Protocol
 
 ## Subgraph Information
